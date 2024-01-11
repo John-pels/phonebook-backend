@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/notes Content-Type: application/json
+
+{
+"name": "Joseph Yobo",
+"number":"+234-49538403804"
+}
