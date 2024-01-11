@@ -1,2 +1,2 @@
-PUT http://localhost:3001/api/notes/:id Content-Type: application/json
+PUT http://localhost:8001/api/persons/:id
 
