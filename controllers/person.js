@@ -25,7 +25,7 @@ const handleGetAPerson = async (req, res, next) => {
 const handleDeleteAPerson = async (req, res, next) => {
   try {
     const id = req.params.id
-    await Book.findByIdAndDelete(id).then((book) => {
+    await Book.findByIdAndDelete(id).then(() => {
       res.status(204).json({
         success: true,
         message: 'Entry was deleted successfully',
