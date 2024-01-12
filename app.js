@@ -13,7 +13,7 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
 
-app.use('/api', personRoutes)
+app.use('/api/persons', personRoutes)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
