@@ -1,9 +1,8 @@
 const Book = require('../models/phonebook')
 const handleGetAllPersons = async (req, res, next) => {
   try {
-    await Book.find({}).then((books) => {
-      return res.json({ success: true, data: books })
-    })
+    const allPersons = await Book.find({})
+    return res.json({ success: true, data: allPersons })
   } catch (err) {
     next(err)
   }
@@ -12,11 +11,10 @@ const handleGetAllPersons = async (req, res, next) => {
 const handleGetAPerson = async (req, res, next) => {
   try {
     const id = req.params.id
-    await Book.findById(id).then((book) => {
-      if (!book)
-        return res.status(404).json({ success: false, error: 'Not found' })
-      return res.json({ success: true, data: book })
-    })
+    const person = await Book.findById(id)
+    if (!person)
+      return res.status(404).json({ success: false, error: 'Not found' })
+    return res.json({ success: true, data: person })
   } catch (err) {
     next(err)
   }
@@ -25,11 +23,10 @@ const handleGetAPerson = async (req, res, next) => {
 const handleDeleteAPerson = async (req, res, next) => {
   try {
     const id = req.params.id
-    await Book.findByIdAndDelete(id).then(() => {
-      res.status(204).json({
-        success: true,
-        message: 'Entry was deleted successfully',
-      })
+    await Book.findByIdAndDelete(id)
+    return res.status(204).json({
+      success: true,
+      message: 'Entry was deleted successfully',
     })
   } catch (err) {
     next(err)
@@ -45,16 +42,15 @@ const handleUpdateAPerson = async (req, res, next) => {
       number: body.number,
     }
 
-    await Book.findByIdAndUpdate(id, person, {
+    const updatedPerson = await Book.findByIdAndUpdate(id, person, {
       new: true,
       runValidators: true,
       context: 'query',
-    }).then((book) => {
-      res.status(200).json({
-        success: true,
-        message: 'Entry was updated successfully',
-        data: book,
-      })
+    })
+    return res.status(200).json({
+      success: true,
+      message: 'Entry was updated successfully',
+      data: updatedPerson,
     })
   } catch (err) {
     next(err)
@@ -65,21 +61,21 @@ const handleCreateAPerson = async (req, res, next) => {
   try {
     const { name, number } = req.body
     if (name === undefined || number === undefined) {
-      res.status(400).json({
+      return res.status(400).json({
         error: 'Name and number are required',
       })
     }
+
     const person = new Book({
       name,
       number,
     })
 
-    await person.save().then((savedPerson) => {
-      return res.status(201).json({
-        success: true,
-        message: 'New entry added successfully',
-        data: savedPerson,
-      })
+    const savedPerson = await person.save()
+    res.status(201).json({
+      success: true,
+      message: 'New entry added successfully',
+      data: savedPerson,
     })
   } catch (err) {
     next(err)
