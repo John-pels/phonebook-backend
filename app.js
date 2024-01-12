@@ -1,3 +1,4 @@
+require('express-async-errors')
 const connectDb = require('./config/db')
 connectDb()
 const express = require('express')

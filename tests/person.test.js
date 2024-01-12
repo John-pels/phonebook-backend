@@ -62,6 +62,36 @@ test('person without name is not added', async () => {
   expect(personsAtEnd).toHaveLength(helper.initialPersons.length)
 })
 
+//A specific person can be viewed
+test('a specific person can be viewed', async () => {
+  const personsAtStart = await helper.personsInDb()
+
+  const personToView = personsAtStart[0]
+
+  const resultNote = await api
+    .get(`/api/persons/${personToView.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  expect(resultNote.body.data).toEqual(personToView)
+})
+
+//a person can be deleted
+test('a person can be deleted', async () => {
+  const personsAtStart = await helper.personsInDb()
+  const personToDelete = personsAtStart[0]
+
+  await api.delete(`/api/persons/${personToDelete.id}`).expect(204)
+
+  const personsAtEnd = await helper.personsInDb()
+
+  expect(personsAtEnd).toHaveLength(helper.initialPersons.length - 1)
+
+  const names = personsAtEnd.map((p) => p.name)
+
+  expect(names).not.toContain(personToDelete.name)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
