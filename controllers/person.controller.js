@@ -1,6 +1,11 @@
 const Book = require('../models/phonebook')
+const User = require('../models/user')
+
 const handleGetAllPersons = async (req, res) => {
-  const allPersons = await Book.find({})
+  const allPersons = await Book.find({}).populate('user', {
+    username: 1,
+    name: 1,
+  })
   return res.json({ success: true, data: allPersons })
 }
 
@@ -42,19 +47,22 @@ const handleUpdateAPerson = async (req, res) => {
 }
 
 const handleCreateAPerson = async (req, res) => {
-  const { name, number } = req.body
+  const { name, number, userId } = req.body
+  const user = await User.findById(userId)
   if (name === undefined || number === undefined) {
     return res.status(400).json({
       error: 'Name and number are required',
     })
   }
-
   const person = new Book({
     name,
     number,
+    user: user.id,
   })
 
   const savedPerson = await person.save()
+  user.notes = user.notes.concat(savedPerson._id)
+  await user.save()
   return res.status(201).json({
     success: true,
     message: 'New entry added successfully',

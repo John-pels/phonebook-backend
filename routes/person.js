@@ -1,6 +1,5 @@
-const express = require('express')
-const router = express.Router()
-const personController = require('../controllers/person')
+const router = require('express').Router()
+const personController = require('../controllers/person.controller')
 
 router.get('/info', (req, res) => {
   res.send('<h1>Phonebook Backend v1.0!</h1>')

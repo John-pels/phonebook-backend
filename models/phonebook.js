@@ -13,6 +13,10 @@ const BookSchema = new mongoose.Schema({
     minLength: 8,
     unique: true,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 BookSchema.set('toJSON', {
