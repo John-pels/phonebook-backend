@@ -61,7 +61,7 @@ const handleCreateAPerson = async (req, res) => {
   })
 
   const savedPerson = await person.save()
-  user.notes = user.notes.concat(savedPerson._id)
+  user.persons = user.persons.concat(savedPerson._id)
   await user.save()
   return res.status(201).json({
     success: true,

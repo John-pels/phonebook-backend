@@ -6,4 +6,9 @@
   "prettier.useEditorConfig": false,
   "prettier.useTabs": false,
   "prettier.configPath": ".prettierrc.js",
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.smoothScrolling": true,
+  "workbench.tree.enableStickyScroll": true,
+  "workbench.editor.scrollToSwitchTabs": true,
 }
