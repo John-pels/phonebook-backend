@@ -1,5 +1,6 @@
 const Book = require('../models/phonebook')
 const User = require('../models/user')
+const { decodeToken } = require('../utils/token')
 
 const handleGetAllPersons = async (req, res) => {
   const allPersons = await Book.find({}).populate('user', {
@@ -47,8 +48,12 @@ const handleUpdateAPerson = async (req, res) => {
 }
 
 const handleCreateAPerson = async (req, res) => {
-  const { name, number, userId } = req.body
-  const user = await User.findById(userId)
+  const { name, number } = req.body
+  const decodedToken = decodeToken(req)
+  if (!decodedToken.id) {
+    return res.status(403).json({ success: false, error: 'Invalid token' })
+  }
+  const user = await User.findById(decodedToken.id)
   if (name === undefined || number === undefined) {
     return res.status(400).json({
       error: 'Name and number are required',
